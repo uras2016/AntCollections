@@ -1,0 +1,44 @@
+<project name = "ant-example" basedir = "."> // obligatory. "." - локальная папка относительно билд файла
+
+    <property name = "src" location = "src"/>
+    <property name = "build" location="build"/>
+    <property name="dist" location="dist"/>  // сюда будет положен финальный jar файл
+
+
+    <target name="init">     // будет просто создавать эти папки
+        <mkdir dir="${build}"/>   // передаем путь к папке, которую нужно создать
+        <mkdir dir="${dist}"/>
+    </target>
+
+
+    <target name="compile" depends="init">
+        <javac srcdir="${src}" destdir="${build}" source="1.8" target="1.8"/>
+                   //   где          куда      версия нашей JVM     версия для какой JVM будем компилилровать
+    </target>
+
+    <target name="dist" depends="compile">   // солздаем jar файл
+        <jar destfile="${dist}/AntExample.jar"/>  // куда - папка dist, название AntExample.jar
+            <fileset dir="build"/>  // из чего будет состоять
+             <manifest>
+             <attribute name="Main-Class" value="Main"/> // прописываем класс с методом меин манифест
+             </manifest>
+        </jar>
+    </target>
+
+    <target name="clean">    // читсим папки, когда будем пересоздавать файл
+        <delete dir="${build}"/>
+        <delete dir="${dist}"/>
+    </target>
+
+</project>
+
+
+
+commands:
+
+ant init
+ant clean
+ant clean compile    -  тут вызовтся сначала клин, потом инит, потом компайл
+ant clean dist // create jar
+java -jar dist/AntExample.jar // open jar file
+
